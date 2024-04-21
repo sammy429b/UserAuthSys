@@ -1,5 +1,6 @@
 import express, {Express, Request,  Response} from 'express'
 import dotenv from 'dotenv'
+import DBconnection from './utils/DBconnect';
 
 const app : Express = express();
 dotenv.config();
@@ -11,6 +12,6 @@ app.get("/", (req: Request, res:Response)=>{
 })
 
 app.listen(port || 5000, ()=>{
-    console.log("server running on port 3000");
-    console.log(port)
+    console.log(`http://localhost:${port}`);
+    DBconnection();
 })
