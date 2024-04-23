@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 
 
 
-const userController = async (req:Request, res:Response) =>{
+export const registerController = async (req:Request, res:Response) =>{
     try {
         const {username, email, password} = req.body;
 
@@ -33,4 +33,8 @@ const userController = async (req:Request, res:Response) =>{
     }
 }
 
-export default userController;
+
+
+export const loginController = async (req:Request, res:Response) =>{
+
+}
