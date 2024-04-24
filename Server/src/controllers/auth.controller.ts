@@ -65,3 +65,21 @@ export const loginController = async (req: Request, res: Response) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+
+export const changePasswordController = async(req:Request, res: Response) =>{
+    try {
+        const {oldPassword, newPassowrd, email} = req.body;
+        if(!oldPassword || !newPassowrd){
+            return res.status(400).json({message: "Provide new and old both password"})
+        }
+
+        const user = await User.findOne({email})
+        let pass = ""
+        if(user)  pass = user.password;
+        console.log(pass)
+        return res.status(200).json({message : "Successfully changed password"});
+    } catch (error) {
+        console.log("error in ")
+    }
+}
