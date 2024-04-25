@@ -1,6 +1,6 @@
 import User from "../models/user.model";
 import { Request, Response } from 'express';
-import bcrypt from 'bcrypt'
+import bcrypt, { compare } from 'bcrypt'
 
 
 
@@ -74,10 +74,18 @@ export const changePasswordController = async(req:Request, res: Response) =>{
             return res.status(400).json({message: "Provide new and old both password"})
         }
 
-        const user = await User.findOne({email})
+        const user = await User.find({email})
         let pass = ""
         if(user)  pass = user.password;
+
+        const isPasswordMatch = await bcrypt.compare(oldPassword,pass)
+        console.log(isPasswordMatch)
         console.log(pass)
+
+        const hashedPassword = await bcrypt.hash(newPassowrd,10);
+
+        const newPass = await User.updateOne({email}, {$set:{password:hashedPassword}}) 
+        console.log(newPass)
         return res.status(200).json({message : "Successfully changed password"});
     } catch (error) {
         console.log("error in ")
