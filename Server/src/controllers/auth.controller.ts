@@ -1,12 +1,29 @@
 import User from "../models/user.model";
 import { Request, Response } from 'express';
-import bcrypt, { compare } from 'bcrypt'
+import bcrypt from 'bcrypt'
 
 
+interface registerType{
+    username : string,
+    email : string,
+    password : string
+}
+
+interface changePasswordType{
+    oldPassword : string,
+    newPassowrd : string,
+    email : string
+}
+
+interface loginType{
+    email : string,
+    password : string
+}
 
 export const registerController = async (req:Request, res:Response) =>{
     try {
-        const {username, email, password} = req.body;
+        const {username, email, password} = req.body as registerType
+            ;
 
         if(!username  || !email || !password ){
             // console.log(username, email, password)
@@ -39,7 +56,7 @@ export const registerController = async (req:Request, res:Response) =>{
 
 export const loginController = async (req: Request, res: Response) => {
     try {
-        const { email, password } = req.body;
+        const { email, password } = req.body as loginType;
 
         if (!email || !password) {
             return res.status(400).json({ "message": "Username or password missing in request" });
@@ -69,14 +86,18 @@ export const loginController = async (req: Request, res: Response) => {
 
 export const changePasswordController = async(req:Request, res: Response) =>{
     try {
-        const {oldPassword, newPassowrd, email} = req.body;
+        const {oldPassword, newPassowrd, email} = req.body as changePasswordType;
         if(!oldPassword || !newPassowrd){
             return res.status(400).json({message: "Provide new and old both password"})
         }
 
-        const user = await User.find({email})
-        let pass = ""
-        if(user)  pass = user.password;
+        const user = await User.findOne({email})
+        
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        
+        const pass = user?.password
 
         const isPasswordMatch = await bcrypt.compare(oldPassword,pass)
         console.log(isPasswordMatch)

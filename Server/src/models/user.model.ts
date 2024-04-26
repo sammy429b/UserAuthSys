@@ -1,6 +1,10 @@
-import { model, Schema } from "mongoose";
+import { Document, model, Schema } from "mongoose";
 
-interface UserSchemaType{
+export interface UserResult<T> extends Document{
+    _doc:T;
+}
+
+export interface UserSchemaType extends UserResult<UserSchemaType>{
     username:string,
     email:string,
     password:string
@@ -24,6 +28,6 @@ const userSchema = new Schema<UserSchemaType>({
     }
 })
 
-const User = model("User",userSchema)
+const User = model<UserSchemaType>("User",userSchema)
 
 export default User;
