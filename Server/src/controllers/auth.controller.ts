@@ -1,7 +1,9 @@
-import User from "../models/user.model";
 import { Request, Response } from 'express';
+import User from "../models/user.model";
 import bcrypt from 'bcrypt'
-
+import redis from '../utils/Redis';
+import sendOTP from '../utils/MailSender';
+import generateOTP from '../utils/generateOTP'
 
 interface registerType{
     username : string,
@@ -110,5 +112,26 @@ export const changePasswordController = async(req:Request, res: Response) =>{
         return res.status(200).json({message : "Successfully changed password"});
     } catch (error) {
         console.log("error in ")
+    }
+}
+
+
+export const sendOTPController = (req:Request, res:Response)=>{
+    try {
+        const { email } = req.body;
+        const user = User.findOne({email});
+
+        if(!user){
+            return res.status(400).json({message : "user not found"})
+        }
+
+        const otp = generateOTP();
+
+        res.status(200).json({otp:otp})
+
+
+        
+    } catch (error) {
+        
     }
 }

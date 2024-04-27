@@ -9,7 +9,7 @@ dotenv.config();
 const port = process.env.PORT;
 
 app.use(express.json());
-app.use("/",authRoute)
+app.use("/u",authRoute)
 
 
 app.get("/", (req: Request, res:Response)=>{
