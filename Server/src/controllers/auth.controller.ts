@@ -116,22 +116,24 @@ export const changePasswordController = async(req:Request, res: Response) =>{
 }
 
 
-export const sendOTPController = (req:Request, res:Response)=>{
+export const sendOTPController = async (req:Request, res:Response)=>{
     try {
         const { email } = req.body;
         const user = User.findOne({email});
-
         if(!user){
             return res.status(400).json({message : "user not found"})
         }
-
+        // otp gernartion storing in redis
         const otp = generateOTP();
-
+        await redis.set(`${email}:otp`, otp, 'EX', 120);
+        const redisOTP = await redis.get(`${email}:otp`);
+        if(redisOTP){
+            sendOTP(email,redisOTP);
+        }
         res.status(200).json({otp:otp})
-
-
         
     } catch (error) {
-        
+        console.log("error in sendOTP controller");
+        res.status(400).json({message:"Internal server error"})
     }
 }

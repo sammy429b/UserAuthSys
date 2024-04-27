@@ -3,25 +3,36 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port:587,
-    secure:false,
+const username = process.env.USER;
+const app_password = process.env.PASS
+
+    const transporter = nodemailer.createTransport({
+    service: "Gmail",
+    host: "smtp.gmail.com",
+    port:465,
+    secure:true,
     auth:{
-        user:process.env.USER,
-        pass: process.env.PASS 
-    }
+        user:username,
+        pass: app_password
+    },
+    logger: true, 
+    debug: true 
 });
 
-const sendOTP = async(receiver:string, otp:number) =>{
-    const info = await transporter.sendMail({
-        from :`"Sammy from app" ${process.env.USER}`,
-        to:`${receiver}`,
-        subject: 'Your OTP for Verification',
-        text: `Your OTP is: ${otp}`
-    });
+const sendOTP = async(receiver:string, otp:string) =>{
+    try{
 
-    console.log("Message sent: %s", info.messageId);
+        const info = await transporter.sendMail({
+            from :`"Sammy from app" ${process.env.USER}`,
+            to:`${receiver}`,
+            subject: 'Your OTP for Verification',
+            text: `Your OTP is: ${otp}`
+        });
+        
+        console.log("Message sent: %s", info.messageId);
+    }catch(error){
+        console.log(error)
+    }
 }
 
 export default sendOTP;
