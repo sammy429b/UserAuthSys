@@ -13,7 +13,7 @@ console.log("render of register")
 const Register = () => {
     const {register, handleSubmit} = useForm<userInputType>();
 
-    const handleLogin = (values: userInputType) =>{
+    const handleRegister = (values: userInputType) =>{
         console.log("submitted")
         console.table(values)
     }
@@ -22,7 +22,7 @@ const Register = () => {
             <div className="w-full h-screen flex justify-center items-center">
                 <div className="w-10/12 md:w-1/3 border-2 px-6 py-12 rounded-md shadow-md">
                     <h1 className="mb-4 text-center text-2xl">Create New Account</h1>
-                    <form className="form flex flex-col gap-y-4" onSubmit={handleSubmit(handleLogin)}>
+                    <form className="form flex flex-col gap-y-4" onSubmit={handleSubmit(handleRegister)}>
                         <div className="grid w-full max-w-xl items-center gap-1.5">
                             <Label htmlFor="username">Username</Label>
                             <Input {...register("username")} type="text" id="username" placeholder="abc" />
