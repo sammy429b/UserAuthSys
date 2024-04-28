@@ -2,18 +2,33 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useForm } from "react-hook-form"
+import axios from "axios"
+import { ApiConfig } from "@/utils/ApiConfig"
+import { useState } from "react"
+import { ButtonLoading } from "@/components/ui/buttonloading"
 
-interface userInputType{
-    email : string,
+interface userInputType {
+    email: string,
     password: string
 
 }
 
-const Login = () => {
 
-    const {register, handleSubmit} = useForm<userInputType>();
-    const handleLogin = (values : userInputType) =>{
+
+const Login = () => {
+    const [loading, setLoading] = useState<boolean>(false);
+    const { register, handleSubmit } = useForm<userInputType>();
+    const handleLogin = async (values: userInputType) => {
         console.log(values)
+        try {
+            setLoading(true);
+            const response = await axios.post(ApiConfig.login, values);
+            const data = await response.data;
+            console.log(data)
+        } catch (error) {
+            console.log(error)
+        }
+        setLoading(false);
     }
 
     return (
@@ -30,7 +45,10 @@ const Login = () => {
                             <Label htmlFor="password">Password</Label>
                             <Input {...register("password")} type="password" id="password" placeholder="********" />
                         </div>
-                        <Button className="mt-2">Login</Button>
+                        {loading?
+                            <ButtonLoading/>:
+                            <Button className="mt-2">Login</Button>
+                        }
                         <p className="text-sm text-center hover:underline underline-offset-4 duration-200 transition-all">create new account</p>
                     </form>
                 </div>

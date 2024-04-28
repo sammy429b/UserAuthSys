@@ -2,6 +2,7 @@ import express, {Express, Request,  Response} from 'express'
 import dotenv from 'dotenv'
 import DBconnection from './utils/DBconnect';
 import authRoute from './routes/auth.route'
+import cors from 'cors'
 
 const app : Express = express();
 dotenv.config();
@@ -9,7 +10,8 @@ dotenv.config();
 const port = process.env.PORT;
 
 app.use(express.json());
-app.use("/u",authRoute)
+app.use(cors())
+app.use("/",authRoute)
 
 
 app.get("/", (req: Request, res:Response)=>{
