@@ -13,7 +13,6 @@ export interface UserSchemaType extends UserResult<UserSchemaType>{
 const userSchema = new Schema<UserSchemaType>({
     username:{
         required:true,
-        unique: true,
         type: String,
     },
     email:{

@@ -24,8 +24,7 @@ interface loginType{
 
 export const registerController = async (req:Request, res:Response) =>{
     try {
-        const {username, email, password} = req.body as registerType
-            ;
+        const {username, email, password} = req.body as registerType;
 
         if(!username  || !email || !password ){
             // console.log(username, email, password)
@@ -36,7 +35,7 @@ export const registerController = async (req:Request, res:Response) =>{
         if(existingUser){
             return res.status(409).json({message:"User already exist with this email"})
         }
-
+        
        const hashedPassword = await  bcrypt.hash(password, 10);
         
         const newUser = new User({

@@ -6,6 +6,8 @@ import axios from "axios"
 import { ApiConfig } from "@/utils/ApiConfig"
 import { useState } from "react"
 import { ButtonLoading } from "@/components/ui/buttonloading"
+import { Link, useNavigate } from "react-router-dom"
+import { useAuth } from "@/context/useAuth"
 
 interface userInputType {
     email: string,
@@ -13,9 +15,15 @@ interface userInputType {
 
 }
 
-
-
 const Login = () => {
+    const {isAuthenticated, setAuthenticated} = useAuth();
+
+    const Navigate = useNavigate();
+    const toggleLogin = () => {
+        setAuthenticated(true);
+        Navigate('/main')
+         console.log(isAuthenticated)
+    };
     const [loading, setLoading] = useState<boolean>(false);
     const { register, handleSubmit } = useForm<userInputType>();
     const handleLogin = async (values: userInputType) => {
@@ -24,6 +32,7 @@ const Login = () => {
             setLoading(true);
             const response = await axios.post(ApiConfig.login, values);
             const data = await response.data;
+            if(response.status === 200) toggleLogin();
             console.log(data)
         } catch (error) {
             console.log(error)
@@ -39,17 +48,17 @@ const Login = () => {
                     <form className=" flex flex-col gap-y-4" onSubmit={handleSubmit(handleLogin)}>
                         <div className="grid w-full max-w-xl items-center gap-1.5">
                             <Label htmlFor="email">Email</Label>
-                            <Input {...register("email")} type="email" id="email" placeholder="xyz@gmail.com" />
+                            <Input {...register("email",{required: true})} type="email" id="email" placeholder="xyz@gmail.com" />
                         </div>
                         <div className="grid w-full max-w-xl items-center gap-1.5">
                             <Label htmlFor="password">Password</Label>
-                            <Input {...register("password")} type="password" id="password" placeholder="********" />
+                            <Input {...register("password",{required: true})} type="password" id="password" placeholder="********" />
                         </div>
                         {loading?
                             <ButtonLoading/>:
                             <Button className="mt-2">Login</Button>
                         }
-                        <p className="text-sm text-center hover:underline underline-offset-4 duration-200 transition-all">create new account</p>
+                        <Link to="/register" className="text-sm text-center hover:underline underline-offset-4 duration-200 transition-all">create new account</Link>
                     </form>
                 </div>
             </div>
