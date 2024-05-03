@@ -10,7 +10,7 @@ const ForgotPassword = () => {
                     <h1 className="mb-4 text-center text-2xl">Reset Password</h1>
                     <form className=" flex flex-col gap-y-4" action="">
                         <div className="grid w-full max-w-xl items-center gap-1.5">
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="password">New Password</Label>
                             <Input type="password" id="password" placeholder="********" />
                         </div>
                         <div className="grid w-full max-w-xl items-center gap-1.5">
