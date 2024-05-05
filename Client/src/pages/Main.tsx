@@ -1,3 +1,4 @@
+import { DropdownMenuDemo } from "@/components/cutom/profile";
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/context/useAuth"
 import { useNavigate } from "react-router-dom";
@@ -18,7 +19,8 @@ const Mian = () => {
         <div>
           Logo
         </div>
-        <div>
+        <div className="flex justify-center gap-2 items-center">
+          <DropdownMenuDemo/>
           <Button onClick={toggleLogout}>
             Logout
           </Button>

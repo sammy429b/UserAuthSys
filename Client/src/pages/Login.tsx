@@ -57,9 +57,12 @@ const Login = () => {
                             <Label htmlFor="password">Password</Label>
                             <Input {...register("password",{required: true})} type="password" id="password" placeholder="********" />
                         </div>
+                        <div className="text-right">
+                        <Link to="/password/otp" className="text-sm text-center hover:underline underline-offset-4 duration-200 transition-all">forgot password</Link>
+                        </div>
                         {loading?
                             <ButtonLoading/>:
-                            <Button className="mt-2">Login</Button>
+                            <Button className="">Login</Button>
                         }
                         <Link to="/register" className="text-sm text-center hover:underline underline-offset-4 duration-200 transition-all">create new account</Link>
                     </form>

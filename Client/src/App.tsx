@@ -15,12 +15,12 @@ function App() {
           <Route element={<LogginedRoute />}>
           <Route path="/" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
+            <Route path="/password/reset" element={<ForgotPassword />}></Route>
+            <Route path="/password/otp" element={<OTP />}></Route>
           </Route>
           <Route element={<PrivateRoute />}>
             <Route path="/main" element={<Main/>}></Route>
-            <Route path="/otp" element={<OTP />}></Route>
             <Route path="/password/change" element={<ChangePassword />}></Route>
-            <Route path="/password/reset" element={<ForgotPassword />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>
