@@ -1,23 +1,38 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
-    isAuthenticated : boolean,
-    mail : string,
+    isAuthenticated: boolean,
+    mail: string
 }
 
-// Create and export the context
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Use AuthContextType as a generic parameter to createContext
-// and provide undefined as the default value
 export const AuthProvider: React.FC = ({ children }) => {
-    const [isAuthenticated, setAuthenticated] = useState(false); 
-    const [mail, setMail] = useState<string>("samsb2609@gmail.com"); 
-   
-    const contextValue = {
+    const [isAuthenticated, setAuthenticated] = useState<boolean>(() => {
+        // Initialize isAuthenticated from localStorage if available
+        const storedAuth = localStorage.getItem("isAuthenticated");
+        return !!storedAuth && JSON.parse(storedAuth);
+    });
+    const [mail, setMail] = useState<string>(() => {
+        // Initialize mail from localStorage if available
+        const storedMail = localStorage.getItem("mail");
+        return storedMail || "";
+    });
+
+
+    // Update localStorage when isAuthenticated or mail changes
+    useEffect(() => {
+        localStorage.setItem("isAuthenticated", JSON.stringify(isAuthenticated));
+    }, [isAuthenticated]);
+
+    useEffect(() => {
+        localStorage.setItem("mail", mail);
+    }, [mail]);
+
+    const contextValue: AuthContextType = {
         isAuthenticated,
-        setAuthenticated,
         mail,
+        setAuthenticated,
         setMail
     };
 
@@ -28,7 +43,6 @@ export const AuthProvider: React.FC = ({ children }) => {
     );
 };
 
-// Define useAuth hook
 export const useAuth = (): AuthContextType => {
     const context = useContext(AuthContext);
     if (context === undefined) {

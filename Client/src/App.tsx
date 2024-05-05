@@ -6,19 +6,22 @@ import ChangePassword from "./pages/ChangePassword"
 import Main from "./pages/Main"
 import PrivateRoute from "./utils/PrivateRoute"
 import OTP from "./pages/OTP"
+import LogginedRoute from "./utils/LoginedRoute"
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
+          <Route element={<LogginedRoute />}>
           <Route path="/" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
+          </Route>
           <Route element={<PrivateRoute />}>
             <Route path="/main" element={<Main/>}></Route>
-          </Route>
+            <Route path="/otp" element={<OTP />}></Route>
             <Route path="/password/change" element={<ChangePassword />}></Route>
             <Route path="/password/reset" element={<ForgotPassword />}></Route>
-            <Route path="/otp" element={<OTP />}></Route>
+          </Route>
         </Routes>
       </BrowserRouter>
     </>
