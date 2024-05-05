@@ -16,11 +16,11 @@ interface userInputType {
 }
 
 const Login = () => {
-    const {isAuthenticated, setAuthenticated} = useAuth();
-
+    const {isAuthenticated, setAuthenticated, setMail} = useAuth();
     const Navigate = useNavigate();
     const toggleLogin = () => {
         setAuthenticated(true);
+
         Navigate('/main')
          console.log(isAuthenticated)
     };
@@ -32,7 +32,10 @@ const Login = () => {
             setLoading(true);
             const response = await axios.post(ApiConfig.login, values);
             const data = await response.data;
-            if(response.status === 200) toggleLogin();
+            if(response.status === 200) {
+                toggleLogin();
+                setMail(values.email)
+            }
             console.log(data)
         } catch (error) {
             console.log(error)

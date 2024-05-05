@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 
 const Mian = () => {
-  const { isAuthenticated, setAuthenticated } = useAuth();
+  const { isAuthenticated, setAuthenticated, mail } = useAuth();
+  console.log("email",mail)
   const Navigate = useNavigate();
   const toggleLogout = () => {
     setAuthenticated(false);

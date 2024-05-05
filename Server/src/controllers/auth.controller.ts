@@ -88,6 +88,7 @@ export const loginController = async (req: Request, res: Response) => {
 export const changePasswordController = async(req:Request, res: Response) =>{
     try {
         const {oldPassword, newPassowrd, email} = req.body as changePasswordType;
+        console.log(oldPassword, " ", newPassowrd)
         if(!oldPassword || !newPassowrd){
             return res.status(400).json({message: "Provide new and old both password"})
         }
