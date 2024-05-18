@@ -1,16 +1,15 @@
-import { DropdownMenuDemo } from "@/components/cutom/profile";
+import { DropdownMenuDemo } from "@/components/custom/profile";
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/context/useAuth"
 import { useNavigate } from "react-router-dom";
 
 
 const Mian = () => {
-  const { isAuthenticated, setAuthenticated, mail } = useAuth();
-  console.log("email",mail)
+  const { handleLogoutAuth, userMailId } = useAuth();
+  console.log("email",userMailId)
   const Navigate = useNavigate();
   const toggleLogout = () => {
-    setAuthenticated(false);
-    console.log(isAuthenticated)
+    handleLogoutAuth()
     Navigate('/')
   };
   return (

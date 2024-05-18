@@ -76,7 +76,7 @@ export const loginController = async (req: Request, res: Response) => {
         }
 
         // Passwords match, user authenticated
-        res.status(200).json({ message: "Login successful" });
+        res.status(201).json({ message: "Login successful" });
 
     } catch (error) {
         console.error("Error in login route", error);
