@@ -13,7 +13,7 @@ interface registerType{
 
 interface changePasswordType{
     oldPassword : string,
-    newPassowrd : string,
+    newPassword : string,
     email : string
 }
 
@@ -87,9 +87,9 @@ export const loginController = async (req: Request, res: Response) => {
 
 export const changePasswordController = async(req:Request, res: Response) =>{
     try {
-        const {oldPassword, newPassowrd, email} = req.body as changePasswordType;
-        console.log(oldPassword, " ", newPassowrd)
-        if(!oldPassword || !newPassowrd){
+        const {oldPassword, newPassword, email} = req.body as changePasswordType;
+        console.log(oldPassword, " ", newPassword)
+        if(!oldPassword || !newPassword){
             return res.status(400).json({message: "Provide new and old both password"})
         }
 
@@ -105,7 +105,7 @@ export const changePasswordController = async(req:Request, res: Response) =>{
         console.log(isPasswordMatch)
         console.log(pass)
 
-        const hashedPassword = await bcrypt.hash(newPassowrd,10);
+        const hashedPassword = await bcrypt.hash(newPassword,10);
 
         const newPass = await User.updateOne({email}, {$set:{password:hashedPassword}}) 
         console.log(newPass)

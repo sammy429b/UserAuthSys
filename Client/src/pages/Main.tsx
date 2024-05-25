@@ -1,5 +1,5 @@
 import { DropdownMenuDemo } from "@/components/custom/profile";
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/button"
 import { useAuth } from "@/context/useAuth"
 import { useNavigate } from "react-router-dom";
 
@@ -18,11 +18,11 @@ const Mian = () => {
         <div>
           Logo
         </div>
-        <div className="flex justify-center gap-2 items-center">
-          <DropdownMenuDemo/>
-          <Button onClick={toggleLogout}>
+        <div className="flex justify-center gap-2 items-center p-2">
+          <DropdownMenuDemo toggleLogout={toggleLogout}/>
+          {/* <Button onClick={toggleLogout}>
             Logout
-          </Button>
+          </Button> */}
         </div>
       </nav>
     </>
