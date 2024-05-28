@@ -7,6 +7,8 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [userMailId, setUserMailId] = useState(() => JSON.parse(localStorage.getItem("userMailId")) || '');
     const [isAuthenticated, setAuthenticated] = useState(() => JSON.parse(localStorage.getItem("isAuthenticated")) || false);
+    const [isOTP, setIsOTP] = useState(false);
+    
 
     useEffect(() => {
         localStorage.setItem("userMailId", JSON.stringify(userMailId));
@@ -27,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ userMailId, isAuthenticated, handleLoginAuth, handleLogoutAuth }}>
+        <AuthContext.Provider value={{ userMailId, isAuthenticated, handleLoginAuth, handleLogoutAuth,userMailId, setUserMailId, isOTP, setIsOTP }}>
             {children}
         </AuthContext.Provider>
     );

@@ -6,11 +6,15 @@ import axios from "axios"
 import { ApiConfig } from "@/utils/ApiConfig"
 import { useState } from "react"
 import { ButtonLoading } from "@/components/ui/buttonloading"
+import { useNavigate } from "react-router-dom"
+import { useAuth } from "@/context/useAuth"
 
 
  
 
 const ForgotPasswordOTP = () => {
+    const Navigate = useNavigate();
+    const {setIsOTP, isOTP, setUserMailId, userMailId} = useAuth();
     const {register, handleSubmit} = useForm();
     const [loading, setLoading] = useState<boolean>(false);
     const handleGetOTP = async(values:string) => {
@@ -20,6 +24,14 @@ const ForgotPasswordOTP = () => {
             const response = await axios.post(ApiConfig.getotp, values);
             const data = await response.data;
             console.log(data)
+
+            if(response.status === 200){
+                setUserMailId(values.email)
+                console.log(userMailId)
+                setIsOTP(true)
+                Navigate('/password/otp');
+            }
+           
         } catch (error:any) {
             console.log("Error in get otp",error)
         } finally{
