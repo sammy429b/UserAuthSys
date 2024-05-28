@@ -6,7 +6,7 @@ import ChangePassword from "./pages/ChangePassword"
 import Main from "./pages/Main"
 import PrivateRoute from "./utils/PrivateRoute"
 import OTP from "./pages/OTP"
-import LogginedRoute from "./utils/LoginedRoute"
+import ForgotPasswordOTP from "./pages/ForgotPasswordOTP"
 function App() {
   return (
     <>
@@ -15,6 +15,7 @@ function App() {
           <Route path="/" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
             <Route path="/password/reset" element={<ForgotPassword />}></Route>
+            <Route path="/password/email" element={<ForgotPasswordOTP />}></Route>
             <Route path="/password/otp" element={<OTP />}></Route>
           <Route element={<PrivateRoute />}>
             <Route path="/main" element={<Main/>}></Route>

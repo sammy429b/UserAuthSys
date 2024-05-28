@@ -119,6 +119,8 @@ export const changePasswordController = async(req:Request, res: Response) =>{
 export const sendOTPController = async (req:Request, res:Response)=>{
     try {
         const { email } = req.body;
+        console.log(req.body)
+        console.log(email)
         const user = User.findOne({email});
         if(!user){
             return res.status(400).json({message : "user not found"})
@@ -130,7 +132,7 @@ export const sendOTPController = async (req:Request, res:Response)=>{
         if(redisOTP){
             sendOTP(email,redisOTP);
         }
-        res.status(200).json({otp:otp})
+        res.status(200).json({Message : "Please Check Your Mail For OTP"})
         
     } catch (error) {
         console.log("error in sendOTP controller");

@@ -4,7 +4,7 @@ const router = Router();
 
 router.post("/register", registerController)
 router.post("/login", loginController)
-router.post("/password/otp", sendOTPController)
+router.post("/password/email", sendOTPController)
 // router.put("/password/reset", forgotPasswordController)
 router.put("/password/change", changePasswordController)
 

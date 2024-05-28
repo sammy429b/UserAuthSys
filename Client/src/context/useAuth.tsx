@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("isAuthenticated", JSON.stringify(isAuthenticated));
     }, [isAuthenticated]);
 
-    const handleLoginAuth = (mail) => {
+    const handleLoginAuth = (mail:string) => {
         setUserMailId(mail);
         setAuthenticated(true);
     };

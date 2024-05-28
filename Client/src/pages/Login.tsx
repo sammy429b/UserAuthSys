@@ -53,7 +53,7 @@ const Login = () => {
                             <Input {...register("password", { required: true })} type="password" id="password" placeholder="********" />
                         </div>
                         <div className="text-right">
-                            <Link to="/password/otp" className="text-sm text-center hover:underline underline-offset-4 duration-200 transition-all">forgot password</Link>
+                            <Link to="/password/email" className="text-sm text-center hover:underline underline-offset-4 duration-200 transition-all">forgot password</Link>
                         </div>
                         {loading ?
                             <ButtonLoading /> :

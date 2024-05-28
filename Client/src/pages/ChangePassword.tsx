@@ -18,9 +18,9 @@ const ChangePassword = () => {
     const { userMailId } = useAuth();
     const { register, handleSubmit } = useForm<PasswordInputType>();
     const handleChangePassword = async (values: PasswordInputType) => {
-        console.log(values)
+        // console.log(values)
         if (values.oldPassword === values.newPassword){
-            console.log(values.oldPassword, " ", values.newPassword)
+            // console.log(values.oldPassword, " ", values.newPassword)
             alert("Old and new password will not be same");
             return;
         }
@@ -36,7 +36,7 @@ const ChangePassword = () => {
             const response = await axios.put(ApiConfig.change, values)
             console.log(response.data)
 
-        } catch (error) {
+        } catch (error:any) {
             console.log("error", error.response.data)
         }
 

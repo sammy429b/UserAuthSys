@@ -22,7 +22,7 @@ const app_password = process.env.PASS
 const sendOTP = async(receiver:string, otp:string) =>{
     try{
 
-        const info = await transporter.sendMail({
+            const info = await transporter.sendMail({
             from :`"Sammy from app" ${process.env.USER}`,
             to:`${receiver}`,
             subject: 'Your OTP for Verification',
