@@ -139,3 +139,24 @@ export const sendOTPController = async (req:Request, res:Response)=>{
         res.status(400).json({message:"Internal server error"})
     }
 }
+
+export const verifyOTPController = async (req:Request, res:Response)=>{
+    try {
+        const { email, OTP } = req.body;
+        console.log(req.body)
+        console.log(email)
+        const user = User.findOne({email});
+        if(!user){
+            return res.status(400).json({message : "user not found"})
+        }
+        const redisOTP = await redis.get(`${email}:otp`);
+        if(redisOTP === OTP){
+            return res.json({message : "set your new password"})
+        }
+        res.status(200).json({Message : "Please Check Your Mail For OTP"})
+        
+    } catch (error) {
+        console.log("error in sendOTP controller");
+        res.status(400).json({message:"Internal server error"})
+    }
+}
