@@ -17,8 +17,9 @@ function App() {
           <Route path="/" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route path="/password/email" element={<ForgotPasswordOTP />}></Route>
-          <Route element={<ForgotPasswordRoute/>}></Route>
-          <Route path="/password/reset" element={<ForgotPassword />}></Route>
+          <Route element={<ForgotPasswordRoute/>}>
+            <Route path="/password/reset" element={<ForgotPassword />}></Route>
+          </Route>
           <Route element={<OTPRoute/>}>
             <Route path="/password/otp" element={<OTP />}></Route>
           </Route>

@@ -1,9 +1,13 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useAuth } from "@/context/useAuth"
+import { ApiConfig } from "@/utils/ApiConfig"
+import axios from "axios"
 import { useForm } from "react-hook-form"
 
 interface PasswordInputType{
+    email:string,
     newPassword : string,
     rerenterPassword: string
 }
@@ -11,9 +15,17 @@ interface PasswordInputType{
 const ForgotPassword = () => {
 
     const {register, handleSubmit} = useForm<PasswordInputType>();
-
+    const {userMailId} = useAuth();
     const handleForgotPassword = async(values: PasswordInputType) =>{
+        values = {...values, email:userMailId}
+        try {
+            const response = await axios.post(ApiConfig.reset, values);
+            const data = response.data;
+            console.log(data)
 
+        } catch (error: any) {
+            console.log("error in reset passowrd", error);
+        }
     }
 
   return (
