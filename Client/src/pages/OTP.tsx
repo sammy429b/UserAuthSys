@@ -12,16 +12,19 @@ import { useNavigate } from "react-router-dom";
 
 export default function OTP() {
   const [value, setValue] = useState<string>("");
-  const { userMailId } = useAuth();
-  const Navigate = useNavigate();
+  const { userMailId, setIsOTP } = useAuth();
+  const navigate = useNavigate();
+
   const handleVerifyOTP = async () => {
-    const values = { otp : value, email: userMailId };
+    const values = { otp: value, email: userMailId };
     try {
       const response = await axios.post(ApiConfig.verifyotp, values);
       const data = response.data;
       console.log(data);
-      if(response.status){
-        Navigate('/password/reset')
+      if (response.status) {
+        setIsOTP(true)
+        navigate('/password/reset');
+
       }
     } catch (error: any) {
       console.log("Error in verify otp", error);
@@ -34,7 +37,7 @@ export default function OTP() {
         <InputOTP
           maxLength={6}
           value={value}
-          onChange={(value) => setValue(value)}
+          onChange={(value: string) => setValue(value)}
         >
           <InputOTPGroup>
             <InputOTPSlot index={0} />
@@ -53,7 +56,7 @@ export default function OTP() {
           )}
         </div>
       </div>
-      <Button onClick={() => handleVerifyOTP({ otp: value })}>Submit</Button>
+      <Button onClick={handleVerifyOTP}>Submit</Button>
     </div>
   );
 }

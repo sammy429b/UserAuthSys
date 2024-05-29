@@ -9,15 +9,14 @@ import { ButtonLoading } from "@/components/ui/buttonloading"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "@/context/useAuth"
 
-
  
 
 const ForgotPasswordOTP = () => {
     const Navigate = useNavigate();
-    const {setIsOTP, isOTP, setUserMailId, userMailId} = useAuth();
+    const {setIsMailId, setUserMailId, userMailId} = useAuth();
     const {register, handleSubmit} = useForm();
     const [loading, setLoading] = useState<boolean>(false);
-    const handleGetOTP = async(values:string) => {
+    const handleGetOTP = async(values:any) => {
         console.log(values)
         setLoading(true)
         try {
@@ -28,7 +27,7 @@ const ForgotPasswordOTP = () => {
             if(response.status === 200){
                 setUserMailId(values.email)
                 console.log(userMailId)
-                setIsOTP(true)
+                setIsMailId(true)
                 Navigate('/password/otp');
             }
            

@@ -1,14 +1,32 @@
-import { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 
-// Create the AuthContext
-export const AuthContext = createContext();
+// Define the shape of the AuthContext
+interface AuthContextType {
+    userMailId: string;
+    setUserMailId: React.Dispatch<React.SetStateAction<string>>;
+    isAuthenticated: boolean;
+    handleLoginAuth: (mail: string) => void;
+    handleLogoutAuth: () => void;
+    isMailId: boolean;
+    setIsMailId: React.Dispatch<React.SetStateAction<boolean>>;
+    isOTP: boolean;
+    setIsOTP: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+// Create the AuthContext with a default value
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Define the AuthProvider props type
+interface AuthProviderProps {
+    children: ReactNode;
+}
 
 // Define the AuthProvider component
-export const AuthProvider = ({ children }) => {
-    const [userMailId, setUserMailId] = useState(() => JSON.parse(localStorage.getItem("userMailId")) || '');
-    const [isAuthenticated, setAuthenticated] = useState(() => JSON.parse(localStorage.getItem("isAuthenticated")) || false);
-    const [isOTP, setIsOTP] = useState(false);
-    
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+    const [userMailId, setUserMailId] = useState<string>(() => JSON.parse(localStorage.getItem("userMailId") || '""'));
+    const [isAuthenticated, setAuthenticated] = useState<boolean>(() => JSON.parse(localStorage.getItem("isAuthenticated") || 'false'));
+    const [isOTP, setIsOTP] = useState<boolean>(false);
+    const [isMailId, setIsMailId] = useState<boolean>(false);
 
     useEffect(() => {
         localStorage.setItem("userMailId", JSON.stringify(userMailId));
@@ -18,7 +36,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("isAuthenticated", JSON.stringify(isAuthenticated));
     }, [isAuthenticated]);
 
-    const handleLoginAuth = (mail:string) => {
+    const handleLoginAuth = (mail: string) => {
         setUserMailId(mail);
         setAuthenticated(true);
     };
@@ -29,13 +47,17 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ userMailId, isAuthenticated, handleLoginAuth, handleLogoutAuth,userMailId, setUserMailId, isOTP, setIsOTP }}>
+        <AuthContext.Provider value={{ userMailId, setUserMailId,isMailId, setIsMailId, isAuthenticated, handleLoginAuth, handleLogoutAuth, isOTP, setIsOTP }}>
             {children}
         </AuthContext.Provider>
     );
 };
 
 // Define and export the useAuth hook
-export const useAuth = () => {
-    return useContext(AuthContext);
+export const useAuth = (): AuthContextType => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
 };

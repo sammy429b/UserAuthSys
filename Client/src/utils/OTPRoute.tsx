@@ -2,10 +2,10 @@ import {useAuth} from "@/context/useAuth"
 import { Navigate, Outlet } from "react-router-dom"
 
 const OTPRoute = () => {
-    const {isOTP} = useAuth();
+    const {isMailId} = useAuth();
   return (
     <>
-        {isOTP ? <Outlet /> : <Navigate to="/" />}
+        {isMailId ? <Outlet /> : <Navigate to="/" />}
     </>
   )
 }
