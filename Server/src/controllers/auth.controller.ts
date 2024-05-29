@@ -17,6 +17,12 @@ interface changePasswordType{
     email : string
 }
 
+interface forgotPasswordType{
+    rerenterPassword : string,
+    newPassword : string,
+    email : string
+}
+
 interface loginType{
     email : string,
     password : string
@@ -27,7 +33,6 @@ export const registerController = async (req:Request, res:Response) =>{
         const {username, email, password} = req.body as registerType;
 
         if(!username  || !email || !password ){
-            // console.log(username, email, password)
             return res.status(400).json({"message":"Username or password missing in request"});
         }
         
@@ -85,11 +90,12 @@ export const loginController = async (req: Request, res: Response) => {
 };
 
 
+
 export const changePasswordController = async(req:Request, res: Response) =>{
     try {
         const {oldPassword, newPassword, email} = req.body as changePasswordType;
         console.log(oldPassword, " ", newPassword)
-        if(!oldPassword || !newPassword){
+        if(!oldPassword || !newPassword ){
             return res.status(400).json({message: "Provide new and old both password"})
         }
 
@@ -111,7 +117,32 @@ export const changePasswordController = async(req:Request, res: Response) =>{
         console.log(newPass)
         return res.status(200).json({message : "Successfully changed password"});
     } catch (error) {
-        console.log("error in ")
+        console.log("error in change password", error)
+    }
+}
+
+
+export const forgotPasswordController = async(req:Request, res: Response) =>{
+    try {
+        const {rerenterPassword, newPassword, email} = req.body as forgotPasswordType;
+        console.log(rerenterPassword, " ", newPassword)
+        if(!rerenterPassword || !newPassword ){
+            return res.status(400).json({message: "Provide new and old both password"})
+        }
+
+        const user = await User.findOne({email})
+        
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        
+        const hashedPassword = await bcrypt.hash(newPassword,10);
+
+        const newPass = await User.updateOne({email}, {$set:{password:hashedPassword}}) 
+        console.log(newPass)
+        return res.status(200).json({message : "Successfully changed password"});
+    } catch (error) {
+        console.log("error in forgot password", error)
     }
 }
 
