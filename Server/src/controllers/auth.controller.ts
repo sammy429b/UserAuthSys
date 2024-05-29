@@ -121,7 +121,7 @@ export const sendOTPController = async (req:Request, res:Response)=>{
         const { email } = req.body;
         console.log(req.body)
         console.log(email)
-        const user = User.findOne({email});
+        const user = await User.findOne({email});
         if(!user){
             return res.status(400).json({message : "user not found"})
         }
@@ -130,7 +130,7 @@ export const sendOTPController = async (req:Request, res:Response)=>{
         await redis.set(`${email}:otp`, otp, 'EX', 120);
         const redisOTP = await redis.get(`${email}:otp`);
         if(redisOTP){
-            sendOTP(email,redisOTP);
+           await sendOTP(email,redisOTP);
         }
         res.status(200).json({Message : "Please Check Your Mail For OTP"})
         
