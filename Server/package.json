@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
-    "@types/nodemailer": "^6.4.14",
+    "@types/nodemailer": "^6.4.15",
     "@types/otp-generator": "^4.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

@@ -1,38 +1,45 @@
 import nodemailer from 'nodemailer';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
 
-const username = process.env.USER;
-const app_password = process.env.PASS
+const username:string | undefined = process.env.USER;
+const app_password:string | undefined= process.env.PASS;
 
-    const transporter = nodemailer.createTransport({
-    service: "Gmail",
-    host: "smtp.gmail.com",
-    port:465,
-    secure:true,
-    auth:{
-        user:username,
-        pass: app_password
+if (!username || !app_password) {
+    throw new Error('Missing environment variables for email configuration.');
+}
+
+console.log('Username:', username);
+console.log('App Password:', app_password);
+
+
+const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+        user: username,
+        pass: app_password,
     },
-    logger: true, 
-    debug: true 
+    logger: true,
+    debug: true,
 });
 
-const sendOTP = async(receiver:string, otp:string) =>{
-    try{
-
-            const info = await transporter.sendMail({
-            from :`"Sammy from app" ${process.env.USER}`,
-            to:`${receiver}`,
+const sendOTP = async (receiver: string, otp: string) => {
+    try {
+        const info = await transporter.sendMail({
+            from: `"Sammy from app" <${username}>`,
+            to: receiver,
             subject: 'Your OTP for Verification',
-            text: `Your OTP is: ${otp}`
+            text: `Your OTP is: ${otp}`,
         });
-        
-        console.log("Message sent: %s", info.messageId);
-    }catch(error){
-        console.log(error)
+
+        console.log('Message sent: %s', info.messageId);
+    } catch (error) {
+        console.error('Error sending email:', error);
     }
-}
+};
 
 export default sendOTP;

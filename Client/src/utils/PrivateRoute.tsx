@@ -10,4 +10,13 @@ const PrivateRoute = () => {
   )
 }
 
+export const PublicRoute = () => {
+    const {isAuthenticated} = useAuth();
+  return (
+    <>
+        {!isAuthenticated ? <Outlet /> : <Navigate to="/main" />}
+    </>
+  )
+}
+
 export default PrivateRoute

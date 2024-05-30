@@ -14,33 +14,29 @@ interface PasswordInputType {
 }
 
 
-const ChangePassword = () => {
+const ChangePassword: React.FC = () => {
     const { userMailId } = useAuth();
     const { register, handleSubmit } = useForm<PasswordInputType>();
+
     const handleChangePassword = async (values: PasswordInputType) => {
-        // console.log(values)
-        if (values.oldPassword === values.newPassword){
-            // console.log(values.oldPassword, " ", values.newPassword)
-            alert("Old and new password will not be same");
+        if (values.oldPassword === values.newPassword) {
+            alert("Old and new passwords cannot be the same");
             return;
         }
-        if (values.newPassword !== values.reenterpassword){
-            alert("new password and re-enter password should be equal")
+        if (values.newPassword !== values.reenterpassword) {
+            alert("New password and re-entered password must match");
             return;
         }
 
-        const value = { email: userMailId, ...values }
-        console.log(value);
+        const value = { email: userMailId, ...values };
 
         try {
-            const response = await axios.put(ApiConfig.change, values)
-            console.log(response.data)
-
-        } catch (error:any) {
-            console.log("error", error.response.data)
+            const response = await axios.put(ApiConfig.change, value);
+            console.log(response.data);
+        } catch (error: any) {
+            console.error("Error", error.response?.data);
         }
-
-    }
+    };
     return (
         <>
             <div className="w-full h-screen flex justify-center items-center">
@@ -59,7 +55,7 @@ const ChangePassword = () => {
                             <Label htmlFor="reenterpassword">Re-enter Password</Label>
                             <Input {...register("reenterpassword", { required: true })} type="password" id="reenterpassword" placeholder="********" />
                         </div>
-                        <Button className="mt-2" onClick={handleChangePassword}>Reset</Button>
+                        <Button className="mt-2">Reset</Button>
                     </form>
                 </div>
             </div>
