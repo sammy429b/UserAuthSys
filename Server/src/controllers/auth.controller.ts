@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import redis from '../utils/Redis';
 import sendOTP from '../utils/MailSender';
 import generateOTP from '../utils/generateOTP'
+import { JWTsign } from '../utils/JWT';
 
 interface registerType{
     username : string,
@@ -81,7 +82,31 @@ export const loginController = async (req: Request, res: Response) => {
         }
 
         // Passwords match, user authenticated
-        res.status(201).json({ message: "Login successful" });
+
+        const token = JWTsign(existingUser._id)
+
+        if (!token) {
+            return res.status(500).json({ message: "Could not generate token" });
+        }
+
+        res.cookie('token', token, {
+            sameSite: 'strict',
+            httpOnly: true,
+        });
+
+        res.status(201).json({ message: "Login successful"});
+
+    } catch (error) {
+        console.error("Error in login route", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+
+export const logoutController = async (req: Request, res: Response) => {
+    try {
+        res.clearCookie('token');
+        res.send('Cookie cleared');
 
     } catch (error) {
         console.error("Error in login route", error);
@@ -91,8 +116,17 @@ export const loginController = async (req: Request, res: Response) => {
 
 
 
+
+
+
 export const changePasswordController = async(req:Request, res: Response) =>{
     try {
+        const{token} = req.cookies;
+        if(!token){
+           return res.status(400).json({message:"no token"})
+        }
+        console.log("token:",token)
+
         const {oldPassword, newPassword, email} = req.body as changePasswordType;
         console.log(oldPassword, " ", newPassword)
         if(!oldPassword || !newPassword ){

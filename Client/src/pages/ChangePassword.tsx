@@ -31,7 +31,9 @@ const ChangePassword: React.FC = () => {
         const value = { email: userMailId, ...values };
 
         try {
-            const response = await axios.put(ApiConfig.change, value);
+            const response = await axios.put(ApiConfig.change, value, {
+                withCredentials: true
+            });
             console.log(response.data);
         } catch (error: any) {
             console.error("Error", error.response?.data);

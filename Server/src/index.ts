@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import DBconnection from './utils/DBconnect';
 import authRoute from './routes/auth.route'
 import cors from 'cors'
+import cookieParser from 'cookie-parser';
 
 const app : Express = express();
 dotenv.config();
@@ -10,7 +11,11 @@ dotenv.config();
 const port = process.env.PORT;
 
 app.use(express.json());
-app.use(cors())
+app.use(cookieParser())
+app.use(cors({
+    origin: 'http://localhost:5174',
+    credentials: true
+}));
 app.use("/",authRoute)
 
 

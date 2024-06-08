@@ -24,7 +24,10 @@ const Login = () => {
         console.log(values)
         try {
             setLoading(true);
-            const response = await axios.post(ApiConfig.login, values);
+            const response = await axios.post(ApiConfig.login, values,{
+                withCredentials: true
+            });
+            console.log(response)
             const data = await response.data;
             if (response.status === 201) {
                 handleLoginAuth(values.email)
