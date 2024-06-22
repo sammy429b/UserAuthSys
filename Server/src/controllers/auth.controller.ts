@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import redis from '../utils/Redis';
 import sendOTP from '../utils/MailSender';
 import generateOTP from '../utils/generateOTP'
-import { JWTsign } from '../utils/JWT';
+import { JWTsign, JWTverify } from '../utils/JWT';
 
 interface registerType{
     username : string,
@@ -83,14 +83,14 @@ export const loginController = async (req: Request, res: Response) => {
 
         // Passwords match, user authenticated
 
-        const token = JWTsign(existingUser._id)
+        const token = JWTsign(existingUser._id.toString())
 
         if (!token) {
             return res.status(500).json({ message: "Could not generate token" });
         }
 
         res.cookie('token', token, {
-            sameSite: 'strict',
+            sameSite: 'lax',
             httpOnly: true,
         });
 
@@ -126,6 +126,9 @@ export const changePasswordController = async(req:Request, res: Response) =>{
            return res.status(400).json({message:"no token"})
         }
         console.log("token:",token)
+
+        const isValid = JWTverify(token)
+        console.log(isValid)
 
         const {oldPassword, newPassword, email} = req.body as changePasswordType;
         console.log(oldPassword, " ", newPassword)

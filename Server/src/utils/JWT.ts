@@ -23,3 +23,20 @@ export function JWTsign(payload: number): string | null {
         return null;
     }
 }
+
+export function JWTverify(JWTtoken: string): any {
+    const JWT_SECRET_KEY = process.env.SECRET_KEY;
+
+    if (!JWT_SECRET_KEY) {
+        console.error('JWT Secret Key is missing');
+        return null;
+    }
+
+    try {
+        const token = jwt.verify(JWTtoken, JWT_SECRET_KEY,)
+        return token;
+    } catch (error) {
+        console.error('Error signing JWT:', error);
+        return null;
+    }
+}
