@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv"
+import { NextFunction, Request, Response } from "express";
+import User from "../models/user.model";
 dotenv.config();
 
 
@@ -24,19 +26,39 @@ export function JWTsign(payload: number): string | null {
     }
 }
 
-export function JWTverify(JWTtoken: string): any {
-    const JWT_SECRET_KEY = process.env.SECRET_KEY;
-
-    if (!JWT_SECRET_KEY) {
+export function JWTverify(req:Request, res:Response, next:NextFunction): void {
+    const JWT_SECRET_KEY = process.env.secret_key;
+    const cookie = req.cookies;
+    if(!JWT_SECRET_KEY){
         console.error('JWT Secret Key is missing');
-        return null;
+        res.status(500).json({message : "Internal server error"})
+        return;
+    }
+
+    if(!cookie){
+        res.status(401).json({message : "Token from cookie is missing"});
+        return;
+    }
+
+    const token = cookie.token;
+
+    if(!token){
+        res.status(200).json({ message: "Unauthorized: token expired", tokenExpired: true});
+        return;
     }
 
     try {
-        const token = jwt.verify(JWTtoken, JWT_SECRET_KEY,)
-        return token;
+        const decoded = jwt.verify(token, JWT_SECRET_KEY);
+        const id = (decoded as {id : number}).id;
+        const user = User.findById(id);
+
+        if(!user){
+            res.status(404).json({message : "Invalid token"});
+            return;
+        }
+        next();
     } catch (error) {
-        console.error('Error signing JWT:', error);
-        return null;
+        console.log('Error in verifying JWT :', error);
+        res.status(401).json({message : "Unauthorized"});
     }
 }

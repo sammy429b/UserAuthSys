@@ -1,6 +1,8 @@
 import express, {Express, Request,  Response} from 'express'
 import dotenv from 'dotenv'
 import DBconnection from './utils/DBconnect';
+import changePasswordRoute from './routes/changePassword.route'
+import forgotPasswordRoute from './routes/forgotPassword.route'
 import authRoute from './routes/auth.route'
 import cors from 'cors'
 import cookieParser from 'cookie-parser';
@@ -17,6 +19,8 @@ app.use(cors({
     credentials: true
 }));
 app.use("/",authRoute)
+app.use("/",changePasswordRoute)
+app.use("/",forgotPasswordRoute)
 
 
 app.get("/", (req: Request, res:Response)=>{

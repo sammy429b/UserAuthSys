@@ -71,7 +71,7 @@ export const loginController = async (req: Request, res: Response) => {
 
         // Passwords match, user authenticated
 
-        const token = JWTsign(existingUser._id.toString())
+        const token = await JWTsign(existingUser._id.toString())
 
         if (!token) {
             return res.status(500).json({ message: "Could not generate token" });
@@ -80,7 +80,10 @@ export const loginController = async (req: Request, res: Response) => {
         res.cookie('token', token, {
             sameSite: 'lax',
             httpOnly: true,
+            secure:false,
         });
+
+        console.log(token)
 
         res.status(201).json({ message: "Login successful" });
 
