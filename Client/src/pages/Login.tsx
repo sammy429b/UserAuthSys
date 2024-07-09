@@ -24,9 +24,7 @@ const Login = () => {
         console.log(values)
         try {
             setLoading(true);
-            const response = await axios.post(ApiConfig.login, values,{
-                withCredentials: true
-            });
+            const response = await axios.post(ApiConfig.login, values);
             console.log(response)
             const data = await response.data;
             if (response.status === 201) {

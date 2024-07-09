@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const username:string | undefined = process.env.USER;
-const app_password:string | undefined= process.env.PASS;
+const username: string | undefined = process.env.USER;
+const app_password: string | undefined = process.env.PASS;
 
 if (!username || !app_password) {
     throw new Error('Missing environment variables for email configuration.');
@@ -20,8 +20,8 @@ const transporter = nodemailer.createTransport({
     port: 587,
     secure: false,
     auth: {
-        user: username,
-        pass: app_password,
+        user: "samsb2609@gmail.com",
+        pass: "oldofdeusadmodrz"
     },
     logger: true,
     debug: true,
