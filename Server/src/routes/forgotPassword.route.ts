@@ -3,9 +3,9 @@ import { sendOTPController, verifyOTPController, forgotPasswordController, } fro
 
 const router = Router();
 
-router.post("/password/email", sendOTPController)
-router.post("/password/otp", verifyOTPController)
-router.post("/password/reset", forgotPasswordController)
+router.post("/email", sendOTPController)
+router.post("/otp", verifyOTPController)
+router.post("/reset", forgotPasswordController)
 
 
 export default router;

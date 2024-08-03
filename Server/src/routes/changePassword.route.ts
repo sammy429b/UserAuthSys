@@ -6,6 +6,6 @@ const router = Router();
 
 router.use(JWTverify)
 
-router.put("/password/change", changePasswordController)
+router.put("/change", changePasswordController)
 
 export default router;
