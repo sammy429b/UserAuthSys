@@ -11,15 +11,15 @@ import { Label } from "@/components/ui/label"
 import { RegisterSchema } from "@/schemas/AuthSchema"
 import { Link, useNavigate } from "react-router-dom"
 
-type userInputType = z.infer<typeof RegisterSchema>
+type RegisterFormTypes = z.infer<typeof RegisterSchema>
 const Register = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors }, setError } = useForm<userInputType>({
+    const { register, handleSubmit, formState: { errors }, setError } = useForm<RegisterFormTypes>({
         resolver: zodResolver(RegisterSchema)
     });
 
-    const handleRegister = async (values: userInputType) => {
+    const handleRegister = async (values: RegisterFormTypes) => {
         if (values.password !== values.repassword) {
             setError('repassword', { type: 'manual', message: 'Passwords do not match' });
             return;
@@ -44,7 +44,7 @@ const Register = () => {
                 } else if (errorResponse?.status === 400) {
                     if (errorResponse.data.errors) {
                         for (const [field, message] of Object.entries(errorResponse.data.errors)) {
-                            setError(field as keyof userInputType, { message: message as string });
+                            setError(field as keyof RegisterFormTypes, { message: message as string });
                         }
                     } else {
                         setError("email", { message: "Email is required" });

@@ -8,19 +8,21 @@ import { useState } from "react"
 import { ButtonLoading } from "@/components/ui/buttonloading"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "@/context/useAuth"
+import { z } from "zod"
+import { LoginSchema } from "@/schemas/AuthSchema"
+import { zodResolver } from "@hookform/resolvers/zod"
 
-interface userInputType {
-    email: string,
-    password: string
-}
+type LoginFormType = z.infer<typeof LoginSchema>
 
 const Login = () => {
-    const { handleLoginAuth } = useAuth();
-    const Navigate = useNavigate();
-
     const [loading, setLoading] = useState<boolean>(false);
-    const { register, handleSubmit } = useForm<userInputType>();
-    const handleLogin = async (values: userInputType) => {
+    const Navigate = useNavigate();
+    const { handleLoginAuth } = useAuth();
+    const { register, handleSubmit, formState:{errors}, setError } = useForm<LoginFormType>({
+        resolver: zodResolver(LoginSchema)
+    });
+
+    const handleLogin = async (values: LoginFormType) => {
         console.log(values)
         try {
             setLoading(true);
@@ -29,13 +31,26 @@ const Login = () => {
             });
             console.log(response)
             const data = await response.data;
-            if (response.status === 201) {
+            if (response.status === 200) {
                 handleLoginAuth(values.email)
+                alert("Login successful")
                 Navigate('/main')
-            }
+
+            }else 
             console.log(data)
         } catch (error) {
-            console.log(error)
+            if(axios.isAxiosError(error)){
+                const errorResponse = error.response;
+                if(errorResponse?.status === 400 && errorResponse.data.field === "email"){
+                    setError("email", {message: errorResponse.data.message})
+                }else if(errorResponse?.status === 400 && errorResponse.data.field === "password"){
+                    setError("password", {message: errorResponse.data.message})
+                }else if(errorResponse?.status === 500){
+                    alert("Internal server error")
+                }else{
+                    alert("An unexpected error occurred. Please try again.")
+                }
+            }
         } finally {
             setLoading(false);
         }
@@ -50,10 +65,12 @@ const Login = () => {
                         <div className="grid w-full max-w-xl items-center gap-1.5">
                             <Label htmlFor="email">Email</Label>
                             <Input {...register("email", { required: true })} type="email" id="email" placeholder="xyz@gmail.com" />
+                            {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
                         </div>
                         <div className="grid w-full max-w-xl items-center gap-1.5">
                             <Label htmlFor="password">Password</Label>
                             <Input {...register("password", { required: true })} type="password" id="password" placeholder="********" />
+                            {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
                         </div>
                         <div className="text-right">
                             <Link to="/password/email" className="text-blue-500 hover:underline">Forgot password?</Link>
