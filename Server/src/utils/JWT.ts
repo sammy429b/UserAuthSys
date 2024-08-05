@@ -16,7 +16,7 @@ export function JWTsign(payload: number): string | null {
     try {
         const token = jwt.sign({ id: payload }, JWT_SECRET_KEY, {
             algorithm: 'HS256', // Change to RS256 if you are using RSA keys
-            expiresIn: '10s',
+            expiresIn: '1d',
         });
         console.log(token)
         return token;
@@ -27,6 +27,7 @@ export function JWTsign(payload: number): string | null {
 }
 
 export function JWTverify(req:Request, res:Response, next:NextFunction): void {
+    console.log('JWTverify');
     const JWT_SECRET_KEY = process.env.secret_key;
     const cookie = req.cookies;
     if(!JWT_SECRET_KEY){
@@ -43,7 +44,7 @@ export function JWTverify(req:Request, res:Response, next:NextFunction): void {
     const token = cookie.token;
 
     if(!token){
-        res.status(200).json({ message: "Unauthorized: token expired", tokenExpired: true});
+        res.status(400).json({ message: "Unauthorized: token expired", tokenExpired: true});
         return;
     }
 

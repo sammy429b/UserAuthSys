@@ -4,8 +4,7 @@ import { JWTverify } from '../utils/JWT';
 
 const router = Router();
 
-router.use(JWTverify)
 
-router.put("/change", changePasswordController)
+router.put("/change",JWTverify, changePasswordController)
 
 export default router;
