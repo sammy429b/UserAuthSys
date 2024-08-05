@@ -15,7 +15,7 @@ type PasswordInputType = z.infer<typeof ForgotPasswordSchema>;
 const ForgotPassword = () => {
     const {userMailId} = useAuth();
     const Navigate = useNavigate();
-    const {register, handleSubmit, formState:{errors}, setError} = useForm<PasswordInputType>({
+    const {register, handleSubmit, formState:{errors}} = useForm<PasswordInputType>({
         resolver: zodResolver(ForgotPasswordSchema),
         defaultValues:{
             email: userMailId,
