@@ -19,8 +19,6 @@ export default function OTP() {
     const values = { otp: value, email: userMailId };
     try {
       const response = await axios.post(ApiConfig.verifyotp, values);
-      const data = response.data;
-      console.log(data);
       if (response.status) {
         setIsOTP(true)
         navigate('/password/reset');
