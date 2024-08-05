@@ -1,10 +1,7 @@
 import { Request, Response } from 'express';
 import User from "../models/user.model";
 import bcrypt from 'bcrypt'
-import redis from '../utils/Redis';
-import sendOTP from '../utils/MailSender';
-import generateOTP from '../utils/generateOTP'
-import { JWTsign, JWTverify } from '../utils/JWT';
+import { JWTsign } from '../utils/JWT';
 
 interface registerType {
     username: string,
@@ -17,6 +14,7 @@ interface loginType {
     password: string
 }
 
+// Register controller
 export const registerController = async (req: Request, res: Response) => {
     try {
         const { username, email, password } = req.body as registerType;
@@ -25,9 +23,13 @@ export const registerController = async (req: Request, res: Response) => {
             return res.status(400).json({ "message": "Username or password missing in request" });
         }
 
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(409).json({ message: "User already exist with this email" })
+        const existingMail = await User.findOne({ email });
+        if (existingMail) {
+            return res.status(409).json({ message: "User already exist with this email", success: false, field: "email" });
+        }
+        const existingUsername = await User.findOne({ username });
+        if (existingUsername) {
+            return res.status(409).json({ message: "User already exist with this username", success: false, field: "username" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -38,17 +40,20 @@ export const registerController = async (req: Request, res: Response) => {
             password: hashedPassword
         })
 
+        if (!newUser) {
+            return res.status(500).json({ message: "Could not create user" });
+        }
+
         await newUser.save();
 
-        res.status(201).json({ message: "User created successfully.", user: newUser });
+        return res.status(201).json({ message: "User created successfully.", success: true });
     } catch (error) {
         console.log("error in register", error)
-        res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error" });
     }
 }
 
-
-
+// Login controller
 export const loginController = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body as loginType;
@@ -60,13 +65,13 @@ export const loginController = async (req: Request, res: Response) => {
         const existingUser = await User.findOne({ email });
 
         if (!existingUser) {
-            return res.status(400).json({ message: "Email does not exist" });
+            return res.status(400).json({ message: "Email does not exist", success: false, field: "email" });
         }
 
         const isPasswordMatch = await bcrypt.compare(password, existingUser.password);
 
         if (!isPasswordMatch) {
-            return res.status(400).json({ message: "Wrong password" });
+            return res.status(400).json({ message: "Wrong password", success: false, field: "password" });
         }
 
         // Passwords match, user authenticated
@@ -80,16 +85,16 @@ export const loginController = async (req: Request, res: Response) => {
         res.cookie('token', token, {
             sameSite: 'lax',
             httpOnly: true,
-            secure:false,
+            secure: false,
         });
 
         console.log(token)
 
-        res.status(201).json({ message: "Login successful" });
+        return res.status(200).json({ message: "Login successful", success: true });
 
     } catch (error) {
         console.error("Error in login route", error);
-        res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error" });
     }
 };
 
@@ -97,11 +102,11 @@ export const loginController = async (req: Request, res: Response) => {
 export const logoutController = async (req: Request, res: Response) => {
     try {
         res.clearCookie('token');
-        res.send('Cookie cleared');
+        return res.status(200).json({ message: "Logged out successfully", success: true });
 
     } catch (error) {
         console.error("Error in login route", error);
-        res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error" });
     }
 };
 
