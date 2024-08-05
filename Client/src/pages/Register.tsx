@@ -10,6 +10,7 @@ import { ApiConfig } from "@/utils/ApiConfig"
 import { Label } from "@/components/ui/label"
 import { RegisterSchema } from "@/schemas/AuthSchema"
 import { Link, useNavigate } from "react-router-dom"
+import { PasswordInput } from "@/components/ui/passwordInput"
 
 type RegisterFormTypes = z.infer<typeof RegisterSchema>
 const Register = () => {
@@ -82,12 +83,12 @@ const Register = () => {
                         </div>
                         <div className="grid w-full max-w-xl items-center gap-1.5">
                             <Label htmlFor="password">Password</Label>
-                            <Input {...register("password", { required: true })} type="password" id="password" placeholder="********" />
+                            <PasswordInput {...register("password", { required: true })} id="password" placeholder="********" />
                             {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
                         </div>
                         <div className="grid w-full max-w-xl items-center gap-1.5">
                             <Label htmlFor="repassword">Re-enter Password</Label>
-                            <Input {...register("repassword", { required: true })} type="password" id="repassword" placeholder="********" />
+                            <PasswordInput {...register("repassword", { required: true })}  id="repassword" placeholder="********" />
                             {errors.repassword && <p className="text-red-500 text-xs">{errors.repassword.message}</p>}
                         </div>
                         {

@@ -7,15 +7,15 @@ import { useNavigate } from "react-router-dom";
 
 
 const Mian = () => {
-  const { handleLogoutAuth, userMailId } = useAuth();
-  console.log("email",userMailId)
+  const { handleLogoutAuth } = useAuth();
+  // console.log("email",userMailId)
   const Navigate = useNavigate();
   const toggleLogout = async() => {
     try {
       const response = await axios.get(ApiConfig.logout,{
         withCredentials: true
     });
-      console.log(response);
+      // console.log(response);
       if(response){
 
         handleLogoutAuth()
@@ -33,9 +33,6 @@ const Mian = () => {
         </div>
         <div className="flex justify-center gap-2 items-center p-2">
           <DropdownMenuDemo toggleLogout={toggleLogout}/>
-          {/* <Button onClick={toggleLogout}>
-            Logout
-          </Button> */}
         </div>
       </nav>
     </>

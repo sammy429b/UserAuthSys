@@ -11,6 +11,7 @@ import { useAuth } from "@/context/useAuth"
 import { z } from "zod"
 import { LoginSchema } from "@/schemas/AuthSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { PasswordInput } from "@/components/ui/passwordInput"
 
 type LoginFormType = z.infer<typeof LoginSchema>
 
@@ -23,21 +24,19 @@ const Login = () => {
     });
 
     const handleLogin = async (values: LoginFormType) => {
-        console.log(values)
+        // console.log(values)
         try {
             setLoading(true);
             const response = await axios.post(ApiConfig.login, values, {
                 withCredentials: true,
             });
-            console.log(response)
-            const data = await response.data;
+
             if (response.status === 200) {
                 handleLoginAuth(values.email)
                 alert("Login successful")
                 Navigate('/main')
 
-            }else 
-            console.log(data)
+            }
         } catch (error) {
             if(axios.isAxiosError(error)){
                 const errorResponse = error.response;
@@ -69,7 +68,7 @@ const Login = () => {
                         </div>
                         <div className="grid w-full max-w-xl items-center gap-1.5">
                             <Label htmlFor="password">Password</Label>
-                            <Input {...register("password", { required: true })} type="password" id="password" placeholder="********" />
+                            <PasswordInput {...register("password", { required: true })} id="password" placeholder="********" />
                             {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
                         </div>
                         <div className="text-right">
