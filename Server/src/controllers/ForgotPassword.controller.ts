@@ -14,24 +14,22 @@ interface forgotPasswordType {
 export const forgotPasswordController = async (req: Request, res: Response) => {
     try {
         const { rerenterPassword, newPassword, email } = req.body as forgotPasswordType;
-        console.log(rerenterPassword, " ", newPassword)
         if (!rerenterPassword || !newPassword) {
             return res.status(400).json({ message: "Provide new and old both password" })
         }
-
         const user = await User.findOne({ email })
-
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-
         const hashedPassword = await bcrypt.hash(newPassword, 10);
-
         const newPass = await User.updateOne({ email }, { $set: { password: hashedPassword } })
-        console.log(newPass)
+        if (!newPass) {
+            return res.status(400).json({ message: "Something went wrong" });
+        }
         return res.status(200).json({ message: "Successfully changed password" });
     } catch (error) {
         console.log("error in forgot password", error)
+        return res.status(500).json({ message: "Internal server error" })
     }
 }
 
@@ -62,15 +60,18 @@ export const sendOTPController = async (req: Request, res: Response) => {
 
 export const verifyOTPController = async (req: Request, res: Response) => {
     try {
-        const { email, OTP } = req.body;
-        console.log(req.body)
-        console.log(email)
+        const { email, otp } = req.body;
+
+        if (!email || !otp) {
+            return res.status(400).json({ message: "OTP is required" })
+        }
+
         const user = User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: "user not found" })
+            return res.status(400).json({ message: "User not found" })
         }
         const redisOTP = await redis.get(`${email}:otp`);
-        if (redisOTP === OTP) {
+        if (redisOTP === otp) {
             return res.json({ message: "set your new password" })
         }
         res.status(200).json({ Message: "Please Check Your Mail For OTP" })
