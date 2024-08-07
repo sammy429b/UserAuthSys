@@ -27,7 +27,6 @@ The User Authentication System was built to provide a secure and scalable way to
     cd UserAuthSys
     ```
 
-### Manual start applicaton
 
 2.  **Install Dependencies**
 
@@ -65,28 +64,6 @@ The User Authentication System was built to provide a secure and scalable way to
    npm run dev
    ```
 
-### Automatic start with Docker
-
-1. **Build and Start Containers**
-
-   ```bash
-   docker-compose up --build
-   ```
-
-   This command builds Docker images and starts containers for both the frontend and backend services.
-
-2. **Access the Application**
-
-   - The frontend will be available at http://localhost:8080.
-   - The backend will be available at http://localhost:3030.
-
-3. **Stop and Remove Containers**
-
-   ```bash
-   docker-compose down
-   ```
-
-   This command stops and removes the containers, networks, and volumes defined in the `docker-compose.yml` file.
 
 
 ## How I Did It?
