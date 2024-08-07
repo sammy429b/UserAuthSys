@@ -1,6 +1,6 @@
 
 export class ApiConfig {
-    static baseUrl = import.meta.env.VITE_API_URL;
+    static baseUrl = import.meta.env.VITE_SERVER_ORIGIN;
     static register = this.baseUrl + "/auth/register";
     static login = this.baseUrl + "/auth/login";
     static logout = this.baseUrl + "/auth/logout";
