@@ -18,7 +18,7 @@ export function JWTsign(payload: number): string | null {
             algorithm: 'HS256', // Change to RS256 if you are using RSA keys
             expiresIn: '1d',
         });
-        console.log(token)
+        // console.log(token)
         return token;
     } catch (error) {
         console.error('Error signing JWT:', error);
@@ -27,7 +27,7 @@ export function JWTsign(payload: number): string | null {
 }
 
 export function JWTverify(req:Request, res:Response, next:NextFunction): void {
-    console.log('JWTverify');
+    // console.log('JWTverify');
     const JWT_SECRET_KEY = process.env.secret_key;
     const cookie = req.cookies;
     if(!JWT_SECRET_KEY){

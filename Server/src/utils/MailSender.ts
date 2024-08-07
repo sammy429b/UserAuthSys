@@ -10,8 +10,8 @@ if (!username || !app_password) {
     throw new Error('Missing environment variables for email configuration.');
 }
 
-console.log('Username:', username);
-console.log('App Password:', app_password);
+// console.log('Username:', username);
+// console.log('App Password:', app_password);
 
 
 const transporter = nodemailer.createTransport({
@@ -21,7 +21,7 @@ const transporter = nodemailer.createTransport({
     secure: false,
     auth: {
         user: "samsb2609@gmail.com",
-        pass: "oldofdeusadmodrz"
+        pass: "lqtvgrpvdwvgpwam"
     },
     logger: true,
     debug: true,
@@ -36,7 +36,7 @@ const sendOTP = async (receiver: string, otp: string) => {
             text: `Your OTP is: ${otp}`,
         });
 
-        console.log('Message sent: %s', info.messageId);
+        // console.log('Message sent: %s', info.messageId);
     } catch (error) {
         console.error('Error sending email:', error);
     }

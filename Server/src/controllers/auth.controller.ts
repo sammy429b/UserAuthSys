@@ -88,7 +88,7 @@ export const loginController = async (req: Request, res: Response) => {
             secure: false,
         });
 
-        console.log(token)
+        // console.log(token)
 
         return res.status(200).json({ message: "Login successful", success: true });
 

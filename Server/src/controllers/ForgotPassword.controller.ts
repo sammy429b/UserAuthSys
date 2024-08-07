@@ -37,8 +37,8 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
 export const sendOTPController = async (req: Request, res: Response) => {
     try {
         const { email } = req.body;
-        console.log(req.body)
-        console.log(email)
+        // console.log(req.body)
+        // console.log(email)
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: "user not found" })
